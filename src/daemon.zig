@@ -1,4 +1,5 @@
 const std = @import("std");
+const processor = @import("processor.zig");
 
 const PENDING_DIR = "spool/pending";
 const PROCESSING_DIR = "spool/processing";
@@ -17,16 +18,27 @@ pub fn worker(io: std.Io) !void {
 
         var w = pending_dir.iterate();
 
+        var did_work = false;
+
         while (try w.next(io)) |e| {
             if (e.kind != .directory) {
                 continue;
             }
+
+            did_work = true;
+
             const old_path: []const u8 = try std.fs.path.join(gpa, &[_][]const u8{ PENDING_DIR, e.name });
             defer gpa.free(old_path);
 
             try cwd.rename(old_path, new_dir, e.name, io);
 
             std.log.debug("claimed job : {s}\n", .{e.name});
+
+            try processor.process(e.name, io);
         }
+
+        // if (did_work) {
+        //     std.Io.sleep(io, std.Io.Duration.toSeconds(1), std.Io.Clock{});
+        // }
     }
 }
