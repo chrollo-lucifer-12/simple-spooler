@@ -15,6 +15,7 @@ fn generateJobID(allocator: std.mem.Allocator, io: std.Io) ![]u8 {
 
 pub fn enqueue(file_path: []const u8, io: std.Io) !void {
     const cwd = std.Io.Dir.cwd();
+
     const gpa = std.heap.page_allocator;
 
     const job_id = try generateJobID(gpa, io);
