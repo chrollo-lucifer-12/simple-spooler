@@ -1,5 +1,6 @@
 const std = @import("std");
 const processor = @import("processor.zig");
+const queue = @import("queue.zig");
 
 const PENDING_DIR = "spool/pending";
 const PROCESSING_DIR = "spool/processing";

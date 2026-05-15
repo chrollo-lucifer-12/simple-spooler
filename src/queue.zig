@@ -4,7 +4,7 @@ const PENDING_DIR = "spool/pending";
 const TASKS_DIR = "jobs";
 const STAGING_DIR = "spool/staging";
 
-const Job = struct { id: []const u8, file: []const u8, status: []const u8 };
+pub const Job = struct { id: []const u8, file: []const u8, status: []const u8 };
 
 fn generateJobID(allocator: std.mem.Allocator, io: std.Io) ![]u8 {
     return std.fmt.allocPrint(
