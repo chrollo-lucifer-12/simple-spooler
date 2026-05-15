@@ -1,6 +1,8 @@
 const std = @import("std");
+const submit = @import("submit.zig");
 
 pub fn main(init: std.process.Init) !void {
+    const io = init.io;
     const gpa = std.heap.page_allocator;
     const mini = init.minimal;
 
@@ -21,4 +23,6 @@ pub fn main(init: std.process.Init) !void {
     }
 
     std.debug.print("{s}\n", .{file_path});
+
+    try submit.submit(file_path, io);
 }
